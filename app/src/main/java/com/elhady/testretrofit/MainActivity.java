@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -14,6 +16,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public interface NewsService {
         @GET("top-headlines")
-        Call<ResponseBody> getNews(@Query("country") String country, @Query("apiKey") String api);
+        Call<ResponseBody> getNews(@QueryMap Map<String,String> stringStringMap);
     }
 
     public void loadNews(View view) {
@@ -40,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url).build();
 
         NewsService newsService = retrofit.create(NewsService.class);
-        newsService.getNews("eg","e4befc80710444afa7f93f67a5790d57")
+        Map<String , String> stringQueryMap = new HashMap<>();
+        stringQueryMap.put("apiKey","e4befc80710444afa7f93f67a5790d57");
+        stringQueryMap.put("country","eg");
+        stringQueryMap.put("category","business");
+        newsService.getNews(stringQueryMap)
+
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
