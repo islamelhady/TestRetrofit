@@ -11,18 +11,23 @@ import android.widget.TextView;
 
 import com.elhady.testretrofit.Interface.ItemClickListener;
 import com.elhady.testretrofit.R;
+import com.elhady.testretrofit.model.Article;
 import com.elhady.testretrofit.model.WebSite;
+
+import java.util.List;
 
 class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     ItemClickListener itemClickListener;
 
-    TextView source_name;
+    TextView source_title;
+    TextView source_desc;
 
     public ListSourceViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        source_name = itemView.findViewById(R.id.source_name);
+        source_title = itemView.findViewById(R.id.source_title);
+        source_desc = itemView.findViewById(R.id.source_description);
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -38,11 +43,12 @@ class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder>{
 
     private Context context;
-    private WebSite webSite;
+    //private WebSite webSite;
+    private List<Article> articles;
 
-    public ListSourceAdapter(Context context, WebSite webSite) {
+    public ListSourceAdapter(Context context, List<Article> articles) {
         this.context = context;
-        this.webSite = webSite;
+        this.articles = articles;
     }
 
     @NonNull
@@ -55,12 +61,13 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ListSourceViewHolder holder, int position) {
-        holder.source_name.setText(webSite.getArticles().get(position).getSource().getName());
+        holder.source_title.setText(articles.get(position).getTitle());
+        holder.source_desc.setText(articles.get(position).getDescription());
 
     }
 
     @Override
     public int getItemCount() {
-        return webSite.getArticles().size();
+        return articles.size();
     }
 }
