@@ -1,6 +1,5 @@
 package com.elhady.testretrofit;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,13 +12,11 @@ import com.elhady.testretrofit.Common.Common;
 import com.elhady.testretrofit.Interface.NewsService;
 import com.elhady.testretrofit.model.Article;
 import com.elhady.testretrofit.model.WebSite;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
-import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //textView = findViewById(R.id.textView);
 
         // Init cache
@@ -159,33 +155,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 
-  /*  public interface NewsService {
-        @GET("top-headlines")
-        Call<ResponseBody> getNews(@Query("country") String country, @Query("apiKey") String api);
-    }*/
-
-    /*public void loadNews(View view) {
-        String url = "http://newsapi.org/v2/";
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(url).build();
-
-        NewsService newsService = retrofit.create(NewsService.class);
-        newsService.getNews("eg","e4befc80710444afa7f93f67a5790d57")
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
-                            textView.setText(response.body().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    }
-                });
-    }*/
 }
