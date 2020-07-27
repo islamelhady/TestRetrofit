@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
 import com.elhady.testretrofit.Interface.ItemClickListener;
 import com.elhady.testretrofit.R;
 import com.elhady.testretrofit.model.Article;
@@ -21,7 +22,7 @@ class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     ItemClickListener itemClickListener;
 
-    TextView source_title,source_name;
+    TextView source_title,source_name,source_publishAt;
     TextView source_desc;
     ImageView source_img;
     TextView source_author;
@@ -33,7 +34,8 @@ class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         source_desc = itemView.findViewById(R.id.desc);
         source_author = itemView.findViewById(R.id.author);
         source_name = itemView.findViewById(R.id.source);
-       // source_img = itemView.findViewById(R.id.source_image);
+        source_publishAt = itemView.findViewById(R.id.publishedAt);
+        source_img = itemView.findViewById(R.id.img);
 
     }
 
@@ -69,11 +71,13 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ListSourceViewHolder holder, int position) {
 
+        Glide.with(context).load(articles.get(position).getUrlToImage()).into(holder.source_img);
 
         holder.source_title.setText(articles.get(position).getTitle());
         holder.source_desc.setText(articles.get(position).getDescription());
         holder.source_author.setText(articles.get(position).getAuthor());
         holder.source_name.setText(articles.get(position).getSource().getName());
+        holder.source_publishAt.setText(articles.get(position).getPublishedAt());
 
     }
 

@@ -16,7 +16,7 @@ import com.elhady.testretrofit.model.WebSite;
 import java.util.ArrayList;
 import java.util.List;
 
-import dmax.dialog.SpotsDialog;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Article> articles = new ArrayList<>();
     private NewsService newsService;
     private ListSourceAdapter adapter;
-    private SpotsDialog dialog;
+   // private SpotsDialog dialog;
     //private SwipeRefreshLayout refreshLayout;
 
     // News API URL =  http://newsapi.org/v2/top-headlines?country=eg&apiKey=e4befc80710444afa7f93f67a5790d57
