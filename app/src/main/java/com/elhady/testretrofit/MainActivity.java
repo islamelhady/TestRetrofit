@@ -1,10 +1,16 @@
 package com.elhady.testretrofit;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.elhady.testretrofit.Adapter.ListSourceAdapter;
@@ -29,32 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private List<Article> articles = new ArrayList<>();
     private NewsService newsService;
     private ListSourceAdapter adapter;
-   // private SpotsDialog dialog;
-    //private SwipeRefreshLayout refreshLayout;
 
-    // News API URL =  http://newsapi.org/v2/top-headlines?country=eg&apiKey=e4befc80710444afa7f93f67a5790d57
-
-    //TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //textView = findViewById(R.id.textView);
 
-        // Init cache
-        //Paper.init(this);
-
-        // Init service
-       // newsService = Common.getNewsService();
-
-        // Init view
-      /*  refreshLayout = findViewById(R.id.swipe_refresh);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadWebSiteSource(true);
-            }
-        });*/
 
         listWebsite = findViewById(R.id.list_source);
         layoutManager = new LinearLayoutManager(MainActivity.this);
@@ -62,16 +48,19 @@ public class MainActivity extends AppCompatActivity {
         listWebsite.setItemAnimator(new DefaultItemAnimator());
         listWebsite.setNestedScrollingEnabled(false);
 
-        //dialog = new SpotsDialog(this);
-
-        // loadWebSiteSource(false);
-        loadWebSiteSource();
+        loadWebSiteSource("");
 
     }
 
-    public void loadWebSiteSource() {
+    public void loadWebSiteSource(final String keyword) {
         newsService = Common.getNewsService();
-        newsService.getSources("eg",API).enqueue(new Callback<WebSite>() {
+        Call<WebSite> call ;
+        if (keyword.length() > 0){
+            call = newsService.getNewsSearch(keyword,"publishedAt",Common.API);
+        }else {
+            call = newsService.getSources("eg", Common.API);
+        }
+        call.enqueue(new Callback<WebSite>() {
             @Override
             public void onResponse(Call<WebSite> call, Response<WebSite> response) {
                 if (response.isSuccessful() && response.body().getArticles() != null){
@@ -95,64 +84,33 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*private void loadWebSiteSource(boolean isRefreshed) {
-        if (!isRefreshed){
-            final String cache = Paper.book().read("cache");
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main,menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
-            if (cache != null && !cache.isEmpty()){ // if have cache
-
-                WebSite website = new Gson().fromJson(cache,WebSite.class); // Convert cache from Jason to object
-                adapter = new ListSourceAdapter(getBaseContext(),website);
-                adapter.notifyDataSetChanged();
-                listWebsite.setAdapter(adapter);
-            }
-            else { // if not have cache
-                dialog.show();
-                newsService.getSources("eg",API).enqueue(new Callback<WebSite>() {
-                    @Override
-                    public void onResponse(Call<WebSite> call, Response<WebSite> response) {
-                        adapter = new ListSourceAdapter(getBaseContext(),response.body());
-                        adapter.notifyDataSetChanged();
-                        listWebsite.setAdapter(adapter);
-
-                        //save to cache
-                        Paper.book().write("cache",new Gson().toJson(response.body()));
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<WebSite> call, Throwable t) {
-
-                    }
-                });
-            }
-        }
-        else { // from swipe Refresh
-
-            dialog.show();
-            newsService.getSources("eg",API).enqueue(new Callback<WebSite>() {
-                @Override
-                public void onResponse(Call<WebSite> call, Response<WebSite> response) {
-                    adapter = new ListSourceAdapter(getBaseContext(),response.body());
-                    adapter.notifyDataSetChanged();
-                    listWebsite.setAdapter(adapter);
-
-                    //save to cache
-                    Paper.book().write("cache",new Gson().toJson(response.body()));
-
-                    // Dismiss refresh
-                    refreshLayout.setRefreshing(false);
-                    // Dismiss dialog
-                    //dialog.dismiss();
-
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search news...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.length() > 2){
+                    loadWebSiteSource(query);
                 }
+                return false;
+            }
 
-                @Override
-                public void onFailure(Call<WebSite> call, Throwable t) {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                loadWebSiteSource(newText);
+                return false;
+            }
+        });
 
-                }
-            });
-        }
-    }*/
-
+        searchMenuItem.getIcon().setVisible(false,false);
+        return true;
+    }
 }
