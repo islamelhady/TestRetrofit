@@ -103,26 +103,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
-  /*  private void initListener() {
-        adapter.setOnItemClickListener(new ListSourceAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                ImageView imageView = view.findViewById(R.id.img);
-                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
 
-                Article article = articles.get(position);
-                intent.putExtra("url", article.getUrl());
-                intent.putExtra("title", article.getTitle());
-                intent.putExtra("img",  article.getUrlToImage());
-                //intent.putExtra("date",  article.getPublishedAt());
-                intent.putExtra("source",  article.getSource().getName());
-                intent.putExtra("author",  article.getAuthor());
-
-                startActivity(intent);
-
-            }
-        });
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

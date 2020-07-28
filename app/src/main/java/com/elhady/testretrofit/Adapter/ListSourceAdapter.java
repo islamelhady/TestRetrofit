@@ -25,7 +25,7 @@ class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     ItemClickListener itemClickListener;
 
-    TextView source_title, source_name, source_publishAt,source_time;
+    TextView source_title, source_name, source_publishAt, source_time;
     TextView source_desc;
     ImageView source_img;
     TextView source_author;
@@ -91,16 +91,15 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClicked) {
-               //ImageView imageView = view.findViewById(R.id.img);
+
+
                 Intent intent = new Intent(context, NewsDetailActivity.class);
 
-               // Article article = articles.get(position);
-                intent.putExtra("url",articles.get(position).getUrl());
+                intent.putExtra("url", articles.get(position).getUrl());
                 intent.putExtra("title", articles.get(position).getTitle());
-                intent.putExtra("img",  articles.get(position).getUrlToImage());
-                //intent.putExtra("date",  articles.get(position).getPublishedAt());
-                intent.putExtra("source",  articles.get(position).getSource().getName());
-                intent.putExtra("author",  articles.get(position).getAuthor());
+                intent.putExtra("img", articles.get(position).getUrlToImage());
+                intent.putExtra("source", articles.get(position).getSource().getName());
+                intent.putExtra("author", articles.get(position).getAuthor());
 
                 context.startActivity(intent);
 
@@ -113,7 +112,6 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
     public int getItemCount() {
         return articles.size();
     }
-
 
 
     public interface OnItemClickListener {
