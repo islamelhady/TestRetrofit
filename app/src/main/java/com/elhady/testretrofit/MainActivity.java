@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     adapter = new ListSourceAdapter(MainActivity.this, articles);
                     listWebsite.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    initListener();
+                   // initListener();
                     swipeRefreshLayout.setRefreshing(false);
 
 
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
-    private void initListener() {
+  /*  private void initListener() {
         adapter.setOnItemClickListener(new ListSourceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             }
         });
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
