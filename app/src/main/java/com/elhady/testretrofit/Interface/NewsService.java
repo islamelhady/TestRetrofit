@@ -15,7 +15,6 @@ public interface NewsService {
     Call<WebSite> getNewsSearch(
 
             @Query("q") String keyword,
-
             @Query("sortBy") String sortBy,
             @Query("apiKey") String apiKey
 
