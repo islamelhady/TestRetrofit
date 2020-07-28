@@ -2,6 +2,7 @@ package com.elhady.testretrofit;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.elhady.testretrofit.Adapter.ListSourceAdapter;
@@ -82,10 +85,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     adapter = new ListSourceAdapter(MainActivity.this, articles);
                     listWebsite.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
+                    initListener();
                     swipeRefreshLayout.setRefreshing(false);
 
-                }else{
+
+                } else {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(MainActivity.this, "No result", Toast.LENGTH_SHORT).show();
                 }
@@ -94,6 +98,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onFailure(Call<WebSite> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+    }
+
+    private void initListener() {
+        adapter.setOnItemClickListener(new ListSourceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ImageView imageView = view.findViewById(R.id.img);
+                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
+
+                Article article = articles.get(position);
+                intent.putExtra("url", article.getUrl());
+                intent.putExtra("title", article.getTitle());
+                intent.putExtra("img",  article.getUrlToImage());
+                //intent.putExtra("date",  article.getPublishedAt());
+                intent.putExtra("source",  article.getSource().getName());
+                intent.putExtra("author",  article.getAuthor());
+
+                startActivity(intent);
 
             }
         });
@@ -113,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() > 2) {
-                   onLoadingSwipeRefresh(query);
+                    onLoadingSwipeRefresh(query);
                 }
                 return false;
             }

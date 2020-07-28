@@ -18,42 +18,13 @@ import com.elhady.testretrofit.model.Article;
 
 import java.util.List;
 
-class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    ItemClickListener itemClickListener;
-
-    TextView source_title,source_name,source_publishAt;
-    TextView source_desc;
-    ImageView source_img;
-    TextView source_author;
-
-    public ListSourceViewHolder(@NonNull View itemView) {
-        super(itemView);
-
-        source_title = itemView.findViewById(R.id.title);
-        source_desc = itemView.findViewById(R.id.desc);
-        source_author = itemView.findViewById(R.id.author);
-        source_name = itemView.findViewById(R.id.source);
-        source_publishAt = itemView.findViewById(R.id.publishedAt);
-        source_img = itemView.findViewById(R.id.img);
-
-    }
-
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    @Override
-    public void onClick(View v) {
-        itemClickListener.onClick(v, getAdapterPosition(), false);
-    }
-}
-
-public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder> {
+public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceAdapter.ListSourceViewHolder> {
 
     private Context context;
     //private WebSite webSite;
     private List<Article> articles;
+    private OnItemClickListener onItemClickListener;
 
     public ListSourceAdapter(Context context, List<Article> articles) {
         this.context = context;
@@ -65,7 +36,7 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
     public ListSourceViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.source_layout, viewGroup, false);
-        return new ListSourceViewHolder(itemView);
+        return new ListSourceViewHolder(itemView,onItemClickListener);
     }
 
     @Override
@@ -85,4 +56,43 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
     public int getItemCount() {
         return articles.size();
     }
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    class ListSourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        OnItemClickListener onItemClickListener;
+
+        TextView source_title,source_name,source_publishAt;
+        TextView source_desc;
+        ImageView source_img;
+        TextView source_author;
+
+        public ListSourceViewHolder(@NonNull View itemView,OnItemClickListener onItemClickListener) {
+            super(itemView);
+
+            source_title = itemView.findViewById(R.id.title);
+            source_desc = itemView.findViewById(R.id.desc);
+            source_author = itemView.findViewById(R.id.author);
+            source_name = itemView.findViewById(R.id.source);
+            source_publishAt = itemView.findViewById(R.id.publishedAt);
+            source_img = itemView.findViewById(R.id.img);
+
+            this.onItemClickListener = onItemClickListener;
+
+        }
+
+
+
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(v, getAdapterPosition());
+        }
+    }
+
 }
