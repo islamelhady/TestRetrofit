@@ -1,6 +1,8 @@
 package com.elhady.testretrofit.Remote;
 
 
+import com.elhady.testretrofit.Interface.NewsService;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -16,6 +18,11 @@ public class RetrofitClient {
                     .build();
         }
         return retrofit;
+    }
+
+    public static NewsService getNewsService (){
+
+        return RetrofitClient.getClient(BASE_URL).create(NewsService.class);
     }
 
 }
