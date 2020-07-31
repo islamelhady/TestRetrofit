@@ -3,7 +3,11 @@ package com.elhady.testretrofit.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,7 +96,6 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
             @Override
             public void onClick(View view, int position, boolean isLongClicked) {
 
-
                 Intent intent = new Intent(context, NewsDetailActivity.class);
 
                 intent.putExtra("url", articles.get(position).getUrl());
@@ -102,6 +105,7 @@ public class ListSourceAdapter extends RecyclerView.Adapter<ListSourceViewHolder
                 intent.putExtra("author", articles.get(position).getAuthor());
 
                 context.startActivity(intent);
+
 
             }
         });
