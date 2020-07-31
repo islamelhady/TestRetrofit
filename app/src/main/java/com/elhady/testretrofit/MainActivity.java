@@ -14,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elhady.testretrofit.Adapter.ListSourceAdapter;
@@ -40,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private NewsService newsService;
     private ListSourceAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private RelativeLayout errorRelativeLayout;
+    private ImageView errorImage;
+    private TextView errorTitle,errorMessage;
+    private Button errorBtnRetry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +67,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         // loadWebSiteSource("");
         onLoadingSwipeRefresh("");
 
+        errorRelativeLayout = findViewById(R.id.error_layout);
+        errorImage = findViewById(R.id.error_image);
+        errorTitle = findViewById(R.id.error_title);
+        errorMessage = findViewById(R.id.error_message);
+        errorBtnRetry= findViewById(R.id.btnRetry);
+
     }
 
     public void loadWebSiteSource(final String keyword) {
+        errorRelativeLayout.setVisibility(View.GONE);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -91,13 +105,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(MainActivity.this, "No result", Toast.LENGTH_SHORT).show();
+
+                    String errorCode;
+                    switch (response.code()) {
+                        case 404:
+                            errorCode = "404 not found";
+                            break;
+                        case 500:
+                            errorCode = "500 server broken";
+                            break;
+                        default:
+                            errorCode = "unknown error";
+                            break;
+                    }
+
+                    showErrorMessage(R.drawable.ic_signal, "No Result", "Please Try Again!\n"+ errorCode);
                 }
             }
 
             @Override
             public void onFailure(Call<WebSite> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
+
+                showErrorMessage(R.drawable.ic_signal, "Oops...", "Network failure Please Try Again!\n"+ t.toString());
 
             }
         });
@@ -148,5 +178,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
+    }
+
+    private void showErrorMessage (int imageView , String title, String message){
+
+        if (errorRelativeLayout.getVisibility() == View.GONE){
+            errorRelativeLayout.setVisibility(View.VISIBLE);
+        }
+        errorImage.setImageResource(imageView);
+        errorTitle.setText(title);
+        errorMessage.setText(message);
+
+        errorBtnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLoadingSwipeRefresh("");
+            }
+        });
     }
 }
